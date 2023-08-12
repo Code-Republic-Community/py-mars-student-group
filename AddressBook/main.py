@@ -1,11 +1,22 @@
 from address_book.address_book import AddressBook
 from address_book.file_handler import FileHandler
+import os
+import sys
 import json
 
+
+def get_data_file_path(filename):
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    data_dir = os.path.join(current_dir, "data")
+    return os.path.join(data_dir, filename)
+
+
 def main():
+    data_file_path = get_data_file_path("address_book_data.json")
     my_address_book = AddressBook()
     file_handler = FileHandler()
-    file_handler.load_address_book(my_address_book)
+    if os.path.getsize(data_file_path) != 0:
+        file_handler.load_address_book(my_address_book, data_file_path)
     while True:
         action = input("Enter 1 to add contact, 2 to search contact, 3 to delete contact, "
                        "4 to update contact, 0 to save Address Book and exit: ")
@@ -18,7 +29,7 @@ def main():
         elif "4" == action.strip():
             my_address_book.update_contact()
         elif "0" == action.strip():
-            file_handler.save_address_book(my_address_book)
+            file_handler.save_address_book(my_address_book, data_file_path)
             break
         else:
             print("You must enter one number from the list.")
@@ -27,6 +38,14 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
+
+
+
+
 
 
 
